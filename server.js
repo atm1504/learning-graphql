@@ -1,22 +1,37 @@
-const express = require("express")
+const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
+const http = require("http");
+
 require("dotenv").config()
 
 const app = express();
 
+// query function
+const typeDefs = `
+type Query{
+    totalPosts: Int!
+}
+`
+
+// resolvers
+const resolvers = {
+    Query: {
+        totalPosts: () => 1504
+    }
+};
+
+const apolloServer = new ApolloServer({
+    typeDefs,resolvers
+});
+
+// applying middleware
+apolloServer.applyMiddleware({ app });
+const httpserver = http.createServer(app);
+
 // rest endpoint
+
+
 app.get('/rest', function(req, res) {
-    res.json({
-        data: 'you hit rest endpoint great!'
-    });
-});
-// rest endpoint
-app.get('/rests', function(req, res) {
-    res.json({
-        data: 'you hit rest endpoint great!'
-    });
-});
-// rest endpoint
-app.get('/restl', function(req, res) {
     res.json({
         data: 'you hit rest endpoint great!'
     });
@@ -24,5 +39,6 @@ app.get('/restl', function(req, res) {
 
 app.listen(process.env.PORT, function() {
     console.log(`server is ready at http://localhost:${process.env.PORT}`);
+    console.log(`server is ready at http://localhost:${process.env.PORT}${apolloServer.graphqlPath}`);
 });
 
