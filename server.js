@@ -3,7 +3,7 @@ const { ApolloServer } = require("apollo-server-express");
 const http = require("http");
 const path = require("path");
 
-const { fileLoader, mergeTypes } = require("merge-graphql-schemas");
+const { fileLoader, mergeTypes, mergeResolvers } = require("merge-graphql-schemas");
 
 
 require("dotenv").config()
@@ -12,15 +12,7 @@ const app = express();
 
 // query function
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './typeDefs')));
-
-
-// resolvers
-const resolvers = {
-    Query: {
-        totalPosts: () => 1504,
-        me:()=> "I want to live"
-    }
-};
+const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 
 const apolloServer = new ApolloServer({
     typeDefs,resolvers
