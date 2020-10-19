@@ -11,9 +11,15 @@ type Query{
     totalPosts: Int!
     allPosts: [Post!]!
 }
+#input type
+input PostInput{
+    title:String!
+    description:String!
+}
+
 # mutation
 type Mutation{
-    newPost(title:String!, description:String!): Post!
+    newPost(input: PostInput!): Post!
 }
 
 `;
